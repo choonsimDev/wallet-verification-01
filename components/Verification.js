@@ -1,12 +1,15 @@
 import Center from "./Center";
 import styled from "styled-components";
+import Form from "./Form";
+import SecretNumber from "./SecretNumber";
 
-const StyledInputBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+const StyleFormBox = styled.div`
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+`;
+const StyledSecretNumberBox = styled.div`
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 `;
 
 export default function Verification() {
@@ -21,14 +24,12 @@ export default function Verification() {
                     Irure dolor eiusmod eu mollit occaecat ullamco amet pariatur Lorem adipisicing officia. Eiusmod deserunt ea amet elit ad in.
                     Consectetur dolore minim aliquip minim laboris Lorem.
                 </p>
-                <StyledInputBox>
-                    {NumberPassword.map((item, idx) => {
-                        return (<><span>{idx + 1}번째
-                        </span> <div key={idx}><input type="text" placeholder="Enter password" /></div></>)
-
-
-                    })}
-                </StyledInputBox>
+                <StyleFormBox>
+                    <Form />
+                </StyleFormBox>
+                <StyledSecretNumberBox>
+                    <SecretNumber />
+                </StyledSecretNumberBox>
             </div>
         </Center >
     )
