@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const StyledInputBox = styled.div`
@@ -15,8 +16,11 @@ const StyledInputBox = styled.div`
     }
 `;
 
-export default function SecretNumber() {
-    const NumberPassword = [1, 2, 3, 4];
+export default function OldSecretNumber() {
+    const [passwords, setPasswords] = useState([]);
+    // todo : 데이타베이스에서 비밀번호들을 가져와야 한다.
+    // todo : 새로 입력된 비밀번호와 올드비밀번호(해싱된)를 비교한다.
+    const NumberPassword = [1, 2, 1, 1, 1, 1];
     return (
         <StyledInputBox>
             {NumberPassword.map((item, idx) => {

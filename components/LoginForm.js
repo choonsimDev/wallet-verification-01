@@ -29,7 +29,13 @@ export default function Form() {
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({ mode: 'onChange' });
     console.log(watch()); // watch input value by passing the name of it
     const onValid = (data) => {
-        console.log('valid', data)
+        fetch('/api/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
         reset({ username: "", password: "", email: "" });
     }
     const onInvalid = (errors) => {
@@ -47,6 +53,7 @@ export default function Form() {
             })}
                 type='text'
                 placeholder='username' />
+            {errors.username?.message}
             <input {...register("password", {
                 required: "password is required"
             })}

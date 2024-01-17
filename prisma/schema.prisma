@@ -15,7 +15,7 @@ model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
   phone     Int?      @unique
-  name      String?
+  username  String?
   password  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -25,7 +25,7 @@ model User {
 model WalletAccount {
   id        Int        @id @default(autoincrement())
   account   String
-  balance   Int
+  balance   Int        @default(0)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   deletedAt DateTime?
@@ -35,7 +35,7 @@ model WalletAccount {
 
 model Password {
   id              Int           @id @default(autoincrement())
-  value           String
+  password        String?
   walletAccountId Int
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt

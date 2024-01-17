@@ -27,8 +27,6 @@ const StyledLink = styled(Link)`
         color: blue;
     }
 `
-
-
 export default function Header() {
     return (
         <StyledHeader>
