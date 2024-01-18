@@ -25,7 +25,7 @@ export default function WalletAccount() {
     console.log(account);
     const onSubmit = (e) => {
         e.preventDefault();
-        fetch('/api/wallet/walletAccount', {
+        fetch('/api/wallet/setWalletAccount', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

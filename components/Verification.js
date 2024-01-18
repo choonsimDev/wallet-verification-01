@@ -5,6 +5,7 @@ import OldSecretNumber from "./OldSecretNumber";
 import NewSecretNumber from "./NewSecretNumber";
 import TitleDescription from "./TitleDescription";
 import WalletAccount from "./WalletAccount";
+import Scanner from "./QRcodeReader";
 
 const StyleFormBox = styled.div`
     margin-top: 2rem;
@@ -22,6 +23,7 @@ export default function Verification() {
             <StyleFormBox>
                 <LoginForm />
             </StyleFormBox>
+            <Scanner />
             <WalletAccount />
             <StyledSecretNumberBox>
                 <OldSecretNumber />
