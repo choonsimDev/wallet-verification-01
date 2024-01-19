@@ -1,22 +1,14 @@
 import React, { useState } from 'react';
-import { QrReader } from 'react-qr-reader';
+import { QrScanner } from '@yudiel/react-qr-scanner';
 
 export default function Scanner() {
     const [data, setData] = useState('No result');
     return (
         <>
             <h1>QR Code Scanner</h1>
-            <QrReader
-                onResult={(result, error) => {
-                    if (!!result) {
-                        setData(result?.text);
-                    }
-
-                    if (!!error) {
-                        console.info(error);
-                    }
-                }}
-                style={{ width: '100%' }}
+            <QrScanner
+                onDecode={(result) => { result && setData(result) }}
+                onError={(error) => console.log(error?.message)}
             />
             <p>{data}</p>
         </>
