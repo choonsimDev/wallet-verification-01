@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { sha256 } from "js-sha256";
 import styled from "styled-components";
 
 const StyledInputBox = styled.div`
@@ -23,6 +24,9 @@ export default function OldSecretNumber() {
         setPassword(e.target.value);
     }
     console.log(password);
+    // hashing fuction
+    const hash = sha256.create();
+    hash.update(password);
     const data = { password, walletAccountId };
     // todo : 입력받은 비밀번호를 해싱해서 데이타베이스에 저장한다.
     const onSubmit = (e) => {
@@ -37,6 +41,7 @@ export default function OldSecretNumber() {
         setPassword("");
 
     }
+
     return (
         <StyledInputBox>
             <form onSubmit={onSubmit}>
@@ -47,6 +52,9 @@ export default function OldSecretNumber() {
                     placeholder="Enter New password"
                 />
                 <input type="submit" value="Create New password" />
+                <div>
+                    <span>Hashing : {hash.hex()}</span>
+                </div>
             </form>
         </StyledInputBox >
     )

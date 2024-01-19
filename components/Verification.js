@@ -6,6 +6,7 @@ import NewSecretNumber from "./NewSecretNumber";
 import TitleDescription from "./TitleDescription";
 import WalletAccount from "./WalletAccount";
 import Scanner from "./QRcodeReader";
+import Hashing from "./Hashing";
 
 const StyleFormBox = styled.div`
     margin-top: 2rem;
