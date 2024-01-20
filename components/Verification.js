@@ -1,38 +1,34 @@
 import Center from "./Center";
 import styled from "styled-components";
-import LoginForm from "./LoginForm";
 import OldSecretNumber from "./OldSecretNumber";
 import NewSecretNumber from "./NewSecretNumber";
 import TitleDescription from "./TitleDescription";
-import WalletAccount from "./WalletAccount";
 import Scanner from "./QRcodeReader";
-import Hashing from "./Hashing";
+import { useState } from "react";
 
-const StyleFormBox = styled.div`
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-`;
 const StyledSecretNumberBox = styled.div`
     margin-top: 2rem;
     margin-bottom: 2rem;
 `;
 
 export default function Verification() {
+    const [walletAccount, setWalletAccount] = useState('');
+
+    const getWalletId = (data) => {
+        setWalletAccount(data);
+        console.log("walletAccount-from-QRscanner", data);
+        console.log("walletAccount-from-QRscanner", typeof data)
+    }
     return (
         <Center>
             <TitleDescription />
-            {/* <StyleFormBox>
-                <LoginForm />
-            </StyleFormBox> */}
-            <Scanner />
-            <WalletAccount />
-            <StyledSecretNumberBox>
-                <OldSecretNumber />
+            <Scanner getWalletAccount={getWalletId} />
+            <StyledSecretNumberBox >
+                <OldSecretNumber address={walletAccount} />
             </StyledSecretNumberBox>
             <StyledSecretNumberBox>
-                <NewSecretNumber />
+                <NewSecretNumber address={walletAccount} />
             </StyledSecretNumberBox>
-
         </Center >
     )
 }

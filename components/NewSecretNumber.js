@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sha256 } from "js-sha256";
 import styled from "styled-components";
 
@@ -41,30 +41,82 @@ const StyledForm = styled.form`
         color: red;
     }
 `;
+const StyledHahingBox = styled.div`
+font-size: 0.5rem;
+`;
 
-export default function OldSecretNumber() {
+export default function OldSecretNumber({ address }) {
     const [password, setPassword] = useState("");
-    const [walletAccountId, setWalletAccountId] = useState(1);
+    const [hashing, setHashing] = useState("");
+    const [walletId, setWalletId] = useState(null);
+    const [error, setError] = useState('');
+    const [reponse, setResponse] = useState(null);
+
+    console.log("props.address", address);
+
     const onPasswordChange = (e) => {
         setPassword(e.target.value);
+        const hash = sha256.create();
+        hash.update(password);
+        setHashing(hash.hex());
     }
-    console.log(password);
-    // hashing fuction
-    const hash = sha256.create();
-    hash.update(password);
-    const data = { password, walletAccountId };
-    // todo : 입력받은 비밀번호를 해싱해서 데이타베이스에 저장한다.
+
+    const getWalletId = async () => {
+        try {
+            const response = await fetch('/api/wallet/findWalletIdByAddress', {
+                method: 'POST', // 또는 GET, API의 요구사항에 따라
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ account: address }),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log('data', data);
+            if (data) {
+                setWalletId(data);
+            } else {
+                setError('Wallet ID not found');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    }
+    useEffect(() => {
+        getWalletId();
+    }, [address]);
+
+    const saveSecret = async () => {
+        try {
+            const response = await fetch('/api/secrets/setSecret', {
+                method: 'POST', // 또는 GET, API의 요구사항에 따라
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password: hashing, walletAccountId: walletId }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('data', data);
+            if (data) {
+                setResponse(data);
+            } else {
+                setError('Secret not saved');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    }
     const onSubmit = (e) => {
         e.preventDefault();
-        fetch('/api/secrets/setSecret', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
+        saveSecret();
         setPassword("");
-
     }
 
     return (
@@ -77,9 +129,11 @@ export default function OldSecretNumber() {
                     placeholder="Enter New password"
                 />
                 <input type="submit" value="Create New password" />
-                <div>
-                    <span>Hashing : {hash.hex()}</span>
-                </div>
+                <StyledHahingBox>
+                    <div>walletAddress :{address}</div>
+                    <div>walletAccountID : {walletId}</div>
+                    <div>Hashing : {hashing}</div>
+                </StyledHahingBox>
             </StyledForm>
         </StyledInputBox >
     )

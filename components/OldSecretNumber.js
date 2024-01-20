@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const StyledInputBox = styled.div`
@@ -16,14 +16,67 @@ const StyledInputBox = styled.div`
     }
 `;
 
-export default function OldSecretNumber() {
+export default function OldSecretNumber({ address }) {
+    const [walletId, setWalletId] = useState(null);
     const [passwords, setPasswords] = useState([]);
-    // todo : 데이타베이스에서 비밀번호들을 가져와야 한다.
-    // todo : 새로 입력된 비밀번호와 올드비밀번호(해싱된)를 비교한다.
-    const NumberPassword = [1, 2, 1, 1, 1, 1];
+    const [error, setError] = useState('');
+
+    const getWalletId = async () => {
+        try {
+            const response = await fetch('/api/wallet/findWalletIdByAddress', {
+                method: 'POST', // API 요구사항에 따라 변경
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ account: address }),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data) {
+                setWalletId(data);
+            } else {
+                setError('Wallet ID not found');
+            }
+        } catch (error) {
+            setError('Error fetching wallet ID: ' + error.message);
+        }
+    };
+
+    const getPasswords = async () => {
+        try {
+            const response = await fetch('/api/password/getPasswords', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ walletAccountId: walletId }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch passwords');
+            }
+            const data = await response.json();
+            setPasswords(data);
+            console.log("data", data);
+        } catch (error) {
+            setError('Error fetching passwords: ' + error.message);
+        }
+    };
+
+
+    useEffect(() => {
+        getWalletId();
+    }, [address]);
+
+    useEffect(() => {
+        if (walletId) {
+            getPasswords();
+        }
+    }, [walletId]);
     return (
         <StyledInputBox>
-            {NumberPassword.map((item, idx) => {
+            {passwords.map((item, idx) => {
                 return (
                     <div key={idx}>
                         <span>{idx + 1}번째</span>
