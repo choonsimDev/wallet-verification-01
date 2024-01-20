@@ -21,9 +21,9 @@ export default function Verification() {
     return (
         <Center>
             <TitleDescription />
-            <StyleFormBox>
+            {/* <StyleFormBox>
                 <LoginForm />
-            </StyleFormBox>
+            </StyleFormBox> */}
             <Scanner />
             <WalletAccount />
             <StyledSecretNumberBox>

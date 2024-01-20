@@ -16,6 +16,31 @@ const StyledInputBox = styled.div`
         border-radius: 5px;
     }
 `;
+const StyledForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    input {
+        width: 300px;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    input[type="submit"] {
+        width: 300px;
+        margin: 10px;
+        padding: 10px;
+        background-color: #ccc;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    span {
+        color: red;
+    }
+`;
 
 export default function OldSecretNumber() {
     const [password, setPassword] = useState("");
@@ -44,7 +69,7 @@ export default function OldSecretNumber() {
 
     return (
         <StyledInputBox>
-            <form onSubmit={onSubmit}>
+            <StyledForm onSubmit={onSubmit}>
                 <input
                     type="text"
                     value={password}
@@ -55,7 +80,7 @@ export default function OldSecretNumber() {
                 <div>
                     <span>Hashing : {hash.hex()}</span>
                 </div>
-            </form>
+            </StyledForm>
         </StyledInputBox >
     )
 }
