@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 
-export default function Scanner({ getWalletAccount }) {
+export default function Scanner({ getWalletAccount, getNewAccount }) {
     const [data, setData] = useState('');
     const checkAddressInDB = async () => {
         try {
@@ -11,8 +11,8 @@ export default function Scanner({ getWalletAccount }) {
             }
             const accounts = await response.json();
             console.log("accounts", accounts);
+            if (data === '') return;
             let foundData = accounts.find(account => account.account === data);
-
             if (foundData === undefined) {
                 const response = await fetch('/api/wallet/setWalletAccount', {
                     method: 'POST',
@@ -22,6 +22,7 @@ export default function Scanner({ getWalletAccount }) {
                     body: JSON.stringify({ data })
                 });
                 console.log("response", response);
+                getNewAccount(true);
             } else {
                 console.log('The address already exists in the database.');
             }

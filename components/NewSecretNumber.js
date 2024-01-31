@@ -63,6 +63,7 @@ export default function OldSecretNumber({ address }) {
 
     const getWalletId = async () => {
         try {
+            if (!address) return;
             const response = await fetch('/api/wallet/findWalletIdByAddress', {
                 method: 'POST', // 또는 GET, API의 요구사항에 따라
                 headers: {
@@ -74,9 +75,11 @@ export default function OldSecretNumber({ address }) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+
             console.log('data', data);
             if (data) {
                 setWalletId(data);
+
             } else {
                 setError('Wallet ID not found');
             }

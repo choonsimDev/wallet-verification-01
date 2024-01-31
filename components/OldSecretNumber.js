@@ -16,13 +16,16 @@ const StyledInputBox = styled.div`
     }
 `;
 
-export default function OldSecretNumber({ address }) {
+export default function OldSecretNumber({ address, getAllPasswordCorrect }) {
     const [walletId, setWalletId] = useState(null);
     const [passwords, setPasswords] = useState([]);
     const [error, setError] = useState('');
 
     const getWalletId = async () => {
         try {
+            if (!address) {
+                return;
+            }
             const response = await fetch('/api/wallet/findWalletIdByAddress', {
                 method: 'POST', // API 요구사항에 따라 변경
                 headers: {
@@ -74,6 +77,9 @@ export default function OldSecretNumber({ address }) {
             getPasswords();
         }
     }, [walletId]);
+
+    // todo : 입력받은 번호를 해싱하여 기존의 해싱된 비밀번호와 비교해서 일치하면, true 메세지를 보여줌
+    getAllPasswordCorrect(true)
     return (
         <StyledInputBox>
             {passwords.map((item, idx) => {

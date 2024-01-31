@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Header from "@/components/Header";
-import Verification from "@/components/Verification";
+import Verification from "@/components/MainVerification";
 
 export default function Home() {
   return (
