@@ -17,7 +17,7 @@ const StyledInputBox = styled.div`
     }
 `;
 
-export default function OldSecretNumber({ address, getAllPasswordCorrect, checkOldSecretNumberExists, handleAllPasswordCorrect }) {
+export default function OldSecretNumber({ address, getAllPasswordCorrect, checkOldSecretNumberExists, AllPasswordCorrect }) {
     const [walletId, setWalletId] = useState(null);
     const [passwords, setPasswords] = useState([]);
     const [inputPasswords, setInputPasswords] = useState([]);
@@ -46,45 +46,53 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect, checkO
             console.log("hashing+++++++++++++", hashing);
             console.log("hash++++++++++++", hash);
             arrayInputPasswords(hash);
-            return true;
-        } else {
-            return false;
-        };
+            handleAllPasswordCorrect();
+        }
+
     }
     const arrayInputPasswords = (hashing) => {
         setInputPasswords([...inputPasswords, hashing]);
     }
 
-    const handlePasswordChange = (index, e) => {
-        console.log("index", index);
-        console.log("e.target.value", e.target.value);
-        const updatedInputPasswords = [...inputPasswords];
-        updatedInputPasswords[index] = e.target.value;
-        setInputPasswords(updatedInputPasswords);
+    const handleAllPasswordCorrect = () => {
+        console.log("passwords.length++++++++++++++", passwords.length);
+        console.log("inputPasswords.length++++++++++++", inputPasswords.length);
+        // inputPasswords.length 다시 확인 필요합니다.
+        if (passwords.length === inputPasswords.length + 1) {
+            AllPasswordCorrect(true);
+        }
+    }
 
-        if (password[idx] === inputPasswords[idx]) {
-            return true;
-        };
+    // const handlePasswordChange = (index, e) => {
+    //     console.log("index", index);
+    //     console.log("e.target.value", e.target.value);
+    //     const updatedInputPasswords = [...inputPasswords];
+    //     updatedInputPasswords[index] = e.target.value;
+    //     setInputPasswords(updatedInputPasswords);
 
-        // 입력된 비밀번호를 해시 처리
-        const hashedInput = sha256(e.target.value);
-        const updatedValidationResults = [...passwordValidationResults];
-        updatedValidationResults[index] = passwords[index] === hashedInput;
-        setPasswordValidationResults(updatedValidationResults);
+    //     if (password[idx] === inputPasswords[idx]) {
+    //         return true;
+    //     };
 
-        // 모든 비밀번호가 올바른지 확인
-        handleAllPasswordCorrect(updatedValidationResults.every(result => result));
-        // handleAllPasswordCorrect(false);
-    };
+    //     // 입력된 비밀번호를 해시 처리
+    //     const hashedInput = sha256(e.target.value);
+    //     const updatedValidationResults = [...passwordValidationResults];
+    //     updatedValidationResults[index] = passwords[index] === hashedInput;
+    //     setPasswordValidationResults(updatedValidationResults);
 
-    const verifyPasswords = () => {
-        const results = passwords.map((storedPassword, index) => storedPassword === inputPasswords[index]);
-        setPasswordValidationResults(results);
-        const allCorrect = results.every((result) => result === true);
-        // getAllPasswordCorrect(allCorrect);
-        // checkOldSecretNumberExists(passwords.length > 0);
-        checkOldSecretNumberExists(true);
-    };
+    //     // 모든 비밀번호가 올바른지 확인
+    //     handleAllPasswordCorrect(updatedValidationResults.every(result => result));
+    //     // handleAllPasswordCorrect(false);
+    // };
+
+    // const verifyPasswords = () => {
+    //     const results = passwords.map((storedPassword, index) => storedPassword === inputPasswords[index]);
+    //     setPasswordValidationResults(results);
+    //     const allCorrect = results.every((result) => result === true);
+    //     // getAllPasswordCorrect(allCorrect);
+    //     // checkOldSecretNumberExists(passwords.length > 0);
+    //     checkOldSecretNumberExists(true);
+    // };
 
     const getWalletId = async () => {
         try {

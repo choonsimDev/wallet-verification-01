@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Center from "./Center";
@@ -26,7 +26,7 @@ export default function Verification() {
     const checkOldSecretNumberExists = (exists) => {
         setOldSecretNumberExists(exists);
     }
-    const handleAllPasswordCorrect = (isCorrect) => {
+    const AllPasswordCorrect = (isCorrect) => {
         setHandleAllPassword(isCorrect);
         // 여기서 isCorrect가 true일 경우, 즉 모든 비밀번호가 올바를 때 원하는 로직을 실행합니다.
         // 예: 사용자에게 성공 메시지를 표시하거나, 다음 폼으로 네비게이션 하는 등
@@ -40,6 +40,9 @@ export default function Verification() {
         // console.log("newAccount", data);
         // console.log("newAccount", typeof data)
     }
+    useEffect(() => {
+
+    }, [handleAllPassword]);
 
     return (
         <Center>
@@ -54,7 +57,7 @@ export default function Verification() {
                 <OldSecretNumber
                     address={walletAccount}
                     checkOldSecretNumberExists={checkOldSecretNumberExists} // 이 함수를 OldSecretNumber 컴포넌트에 전달합니다.
-                    handleAllPasswordCorrect={handleAllPasswordCorrect}
+                    AllPasswordCorrect={AllPasswordCorrect}
                 />
             </StyledSecretNumberBox>
 
@@ -66,7 +69,7 @@ export default function Verification() {
             </StyledSecretNumberBox> */}
             {/* 처음 등록하는 주소면 새로운 비번 등록창 보이도록 */}
             {/* 기존비번을 다 맞게 입력했으면 새로운 비번 등록창 보이도록 */}
-            {walletAccount && handleAllPassword && (
+            {handleAllPassword && (
                 <StyledSecretNumberBox>
                     <NewSecretNumber
                         address={walletAccount}
