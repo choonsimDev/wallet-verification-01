@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { sha256 } from "js-sha256";
 import styled from "styled-components";
 
 const StyledInputBox = styled.div`
@@ -16,10 +17,74 @@ const StyledInputBox = styled.div`
     }
 `;
 
-export default function OldSecretNumber({ address, getAllPasswordCorrect }) {
+export default function OldSecretNumber({ address, getAllPasswordCorrect, checkOldSecretNumberExists, handleAllPasswordCorrect }) {
     const [walletId, setWalletId] = useState(null);
     const [passwords, setPasswords] = useState([]);
+    const [inputPasswords, setInputPasswords] = useState([]);
     const [error, setError] = useState('');
+
+    const [password, setPassword] = useState("");
+    const [hashing, setHashing] = useState("");
+    const [passwordValidationResults, setPasswordValidationResults] = useState([]);
+
+
+    const onPasswordChange = (e, idx) => {
+        const newPassword = e.target.value;
+        console.log("e.target.value", e.target.value);
+        console.log("newPassword", newPassword);
+        console.log("password", password);
+        setPassword(newPassword);
+        const hash = sha256(newPassword);
+        console.log("hash=================", hash);
+        setHashing(hash);
+        console.log("hashing============", hashing);
+        console.log("passwords================", passwords);
+        console.log("passwords[idx]================", passwords[idx]);
+        // setInputPasswords([...inputPasswords, hash]);
+
+        if (passwords[idx].password === hash.toString()) {
+            console.log("hashing+++++++++++++", hashing);
+            console.log("hash++++++++++++", hash);
+            arrayInputPasswords(hash);
+            return true;
+        } else {
+            return false;
+        };
+    }
+    const arrayInputPasswords = (hashing) => {
+        setInputPasswords([...inputPasswords, hashing]);
+    }
+
+    const handlePasswordChange = (index, e) => {
+        console.log("index", index);
+        console.log("e.target.value", e.target.value);
+        const updatedInputPasswords = [...inputPasswords];
+        updatedInputPasswords[index] = e.target.value;
+        setInputPasswords(updatedInputPasswords);
+
+        if (password[idx] === inputPasswords[idx]) {
+            return true;
+        };
+
+        // 입력된 비밀번호를 해시 처리
+        const hashedInput = sha256(e.target.value);
+        const updatedValidationResults = [...passwordValidationResults];
+        updatedValidationResults[index] = passwords[index] === hashedInput;
+        setPasswordValidationResults(updatedValidationResults);
+
+        // 모든 비밀번호가 올바른지 확인
+        handleAllPasswordCorrect(updatedValidationResults.every(result => result));
+        // handleAllPasswordCorrect(false);
+    };
+
+    const verifyPasswords = () => {
+        const results = passwords.map((storedPassword, index) => storedPassword === inputPasswords[index]);
+        setPasswordValidationResults(results);
+        const allCorrect = results.every((result) => result === true);
+        // getAllPasswordCorrect(allCorrect);
+        // checkOldSecretNumberExists(passwords.length > 0);
+        checkOldSecretNumberExists(true);
+    };
 
     const getWalletId = async () => {
         try {
@@ -67,7 +132,6 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect }) {
         }
     };
 
-
     useEffect(() => {
         getWalletId();
     }, [address]);
@@ -78,18 +142,32 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect }) {
         }
     }, [walletId]);
 
-    // todo : 입력받은 번호를 해싱하여 기존의 해싱된 비밀번호와 비교해서 일치하면, true 메세지를 보여줌
-    getAllPasswordCorrect(true)
+    // todo : 비밀번호가 모두 일치한다면 getAllPasswordCorrect를 true로 변경
+
     return (
         <StyledInputBox>
             {passwords.map((item, idx) => {
                 return (
                     <div key={idx}>
-                        <span>{idx + 1}번째</span>
-                        <div ><input type="text" placeholder="Enter password" /></div>
+                        <span>{idx + 1}번째 비밀번호:</span>
+                        <input
+                            type="password"
+                            placeholder="Enter password"
+                            onChange={(e) => onPasswordChange(e, idx)}
+                        // onBlur={verifyPasswords}
+                        />
+                        {<p>{item.password}</p>}
+                        {console.log("item.password", item.password)}
+                        {console.log("hashing", hashing)}
+                        {console.log("password", password)}
+                        {console.log("passwords", passwords)}
+                        {/* {item.password === hashing ? <p>true</p> : <p>false</p>} */}
+                        {console.log("inputPasswords", inputPasswords)}
+                        {item.password === inputPasswords[idx] ? <p>true</p> : <p>false</p>}
                     </div>
                 )
             })}
+            {error && <p>{error}</p>}
         </StyledInputBox>
     )
 }

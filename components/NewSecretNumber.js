@@ -42,7 +42,11 @@ const StyledForm = styled.form`
     }
 `;
 const StyledHahingBox = styled.div`
-font-size: 0.5rem;
+    font-size: 0.5rem;
+`;
+const SuccessMessage = styled.div`
+    color: green;
+    margin-top: 20px;
 `;
 
 export default function OldSecretNumber({ address }) {
@@ -50,15 +54,18 @@ export default function OldSecretNumber({ address }) {
     const [hashing, setHashing] = useState("");
     const [walletId, setWalletId] = useState(null);
     const [error, setError] = useState('');
-    const [reponse, setResponse] = useState(null);
-
-    console.log("props.address", address);
+    const [response, setResponse] = useState(null);
 
     const onPasswordChange = (e) => {
-        setPassword(e.target.value);
-        const hash = sha256.create();
-        hash.update(password);
-        setHashing(hash.hex());
+        const newPassword = e.target.value;
+        console.log("e.target.value", e.target.value);
+        console.log("newPassword", newPassword);
+        console.log("password", password);
+        setPassword(newPassword);
+        const hash = sha256(newPassword);
+        setHashing(hash);
+        console.log("hash", hash);
+        console.log("hashing", hashing);
     }
 
     const getWalletId = async () => {
@@ -76,23 +83,30 @@ export default function OldSecretNumber({ address }) {
             }
             const data = await response.json();
 
-            console.log('data', data);
+            // console.log('data', data);
             if (data) {
                 setWalletId(data);
 
             } else {
                 setError('Wallet ID not found');
             }
+            // console.log('walletId', walletId);
         } catch (error) {
             setError(error.message);
         }
     }
+
     useEffect(() => {
         getWalletId();
+        console.log('address', address);
+
     }, [address]);
 
     const saveSecret = async () => {
         try {
+            console.log('input', password);
+            console.log('hashing', hashing);
+            console.log('walletId', walletId);
             const response = await fetch('/api/secrets/setSecret', {
                 method: 'POST', // 또는 GET, API의 요구사항에 따라
                 headers: {
@@ -137,6 +151,8 @@ export default function OldSecretNumber({ address }) {
                     <div>walletAccountID : {walletId}</div>
                     <div>Hashing : {hashing}</div>
                 </StyledHahingBox>
+                {response && <SuccessMessage>비밀번호가 성공적으로 저장되었습니다.</SuccessMessage>}
+                {error && <span>{error}</span>}
             </StyledForm>
         </StyledInputBox >
     )

@@ -8,7 +8,6 @@ export default async function handler(req, res) {
             },
         });
         console.log(result);
-
         res.status(200).json({ ok: true });
     } catch (error) {
         console.error("An error occurred:", error);
