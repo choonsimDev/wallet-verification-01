@@ -135,7 +135,7 @@ export default function OldSecretNumber({ address }) {
         saveSecret();
         setPassword("");
     }
-
+    // Todo : 새로운 비밀번호가 성공적으로 저장되면, 새비밀번호 입력창 숨겨야 함.
     return (
         <StyledInputBox>
             <StyledForm onSubmit={onSubmit}>

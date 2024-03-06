@@ -47,6 +47,7 @@ export default function Verification() {
     return (
         <Center>
             <TitleDescription />
+            {/* Todo : 버튼으로 카메라를 열고,어카운트 입력이 완료되면, 카메라 창 닫아야함. */}
             <Scanner
                 getWalletAccount={getWalletAccount}
                 getNewAccount={getNewAccount}>
