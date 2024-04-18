@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 
-export default function Scanner({ getWalletAccount, getNewAccount }) {
+export default function Scanner({ getWalletAccount, getNewAccount, closeScanner }) {
     const [data, setData] = useState('');
+
     const checkAddressInDB = async () => {
         try {
             const response = await fetch('/api/wallet/getAllWalletAccounts');
@@ -28,17 +29,21 @@ export default function Scanner({ getWalletAccount, getNewAccount }) {
         } catch (error) {
             console.error('Error fetching wallet accounts:', error);
         }
-    }
+    };
+
     useEffect(() => {
-        checkAddressInDB();
-        getWalletAccount(data);
-    }, [data]);
+        if (data !== '') {
+            checkAddressInDB();
+            getWalletAccount(data);
+            closeScanner(); // Close the scanner after the data is handled
+        }
+    }, [data, getWalletAccount, closeScanner]);
 
     return (
         <>
             <h1>QR Code Scanner</h1>
             <QrScanner
-                onDecode={(result) => { result && setData(result) }}
+                onDecode={(result) => { if (result) setData(result); }}
                 onError={(error) => console.log(error?.message)}
             />
             <p>address : {data}</p>
