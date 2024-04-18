@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Center from "./Center";
-import OldSecretNumber from "./OldSecretNumber";
+import OldSecretNumber from "./OldSecretNumber_old";
 import NewSecretNumber from "./NewSecretNumber";
 import TitleDescription from "./TitleDescription";
 import Scanner from "./QRcodeReader";
@@ -84,7 +84,7 @@ export default function Verification() {
                 <OldSecretNumber
                     address={walletAccount}
                     checkOldSecretNumberExists={checkOldSecretNumberExists} // 이 함수를 OldSecretNumber 컴포넌트에 전달합니다.
-                    AllPasswordCorrect={AllPasswordCorrect}
+                    AllPasswordCorrect={setHandleAllPassword}
                 />
             </StyledSecretNumberBox>
 
