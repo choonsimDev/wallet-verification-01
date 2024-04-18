@@ -22,32 +22,42 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect, checkO
     const [passwords, setPasswords] = useState([]);
     const [inputPasswords, setInputPasswords] = useState([]);
     const [error, setError] = useState('');
+    const [validInputs, setValidInputs] = useState([]); // 입력 검증 상태 배열
 
     const [password, setPassword] = useState("");
     const [hashing, setHashing] = useState("");
 
+    useEffect(() => {
+        getWalletId();
+    }, [address]);
+    useEffect(() => {
+        if (walletId) {
+            getPasswords();
+        }
+    }, [walletId]);
+    useEffect(() => {
+        setValidInputs(new Array(passwords.length).fill(false));
+    }, [passwords]);
+
     const onPasswordChange = (e, idx) => {
         const newPassword = e.target.value;
-        console.log("e.target.value", e.target.value);
-        console.log("newPassword", newPassword);
-        console.log("password", password);
-        setPassword(newPassword);
         const hash = sha256(newPassword);
-        console.log("hash=================", hash);
-        setHashing(hash);
-        console.log("hashing============", hashing);
-        console.log("passwords================", passwords);
-        console.log("passwords[idx]================", passwords[idx]);
-        // setInputPasswords([...inputPasswords, hash]);
 
-        if (passwords[idx].password === hash.toString()) {
-            console.log("hashing+++++++++++++", hashing);
-            console.log("hash++++++++++++", hash);
-            arrayInputPasswords(hash);
-            handleAllPasswordCorrect();
+        setInputPasswords(prev => ({ ...prev, [idx]: newPassword }));
+
+        if (passwords[idx].password === hash) {
+            const updatedValidInputs = [...validInputs];
+            updatedValidInputs[idx] = true;
+            setValidInputs(updatedValidInputs);
+
+            if (updatedValidInputs.every(Boolean)) {
+                AllPasswordCorrect(true);
+            }
+        } else {
+            setError("Incorrect password. Please try again.");
         }
+    };
 
-    }
     const arrayInputPasswords = (hashing) => {
         setInputPasswords([...inputPasswords, hashing]);
     }
@@ -138,41 +148,25 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect, checkO
         }
     };
 
-    useEffect(() => {
-        getWalletId();
-    }, [address]);
 
-    useEffect(() => {
-        if (walletId) {
-            getPasswords();
-        }
-    }, [walletId]);
 
-    // todo : 비밀번호가 모두 일치한다면 getAllPasswordCorrect를 true로 변경
 
     return (
         <StyledInputBox>
-            {passwords.map((item, idx) => {
-                return (
+            {passwords.map((item, idx) => (
+                !validInputs[idx] && (
                     <div key={idx}>
                         <span>{idx + 1}번째 비밀번호:</span>
                         <input
                             type="password"
                             placeholder="Enter password"
+                            value={inputPasswords[idx] || ""}
                             onChange={(e) => onPasswordChange(e, idx)}
-                        // onBlur={verifyPasswords}
+                            disabled={validInputs[idx]}
                         />
-                        {/* {<p>{item.password}</p>}
-                        {console.log("item.password", item.password)}
-                        {console.log("hashing", hashing)}
-                        {console.log("password", password)}
-                        {console.log("passwords", passwords)}
-                        {item.password === hashing ? <p>true</p> : <p>false</p>}
-                        {console.log("inputPasswords", inputPasswords)} */}
-                        {item.password === inputPasswords[idx] ? <p>true</p> : <p>false</p>}
                     </div>
                 )
-            })}
+            ))}
             {error && <p>{error}</p>}
         </StyledInputBox>
     )
