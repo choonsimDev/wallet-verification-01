@@ -25,8 +25,6 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect, checkO
 
     const [password, setPassword] = useState("");
     const [hashing, setHashing] = useState("");
-    const [passwordValidationResults, setPasswordValidationResults] = useState([]);
-
 
     const onPasswordChange = (e, idx) => {
         const newPassword = e.target.value;

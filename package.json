@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^5.10.2",
+    "@prisma/client": "^5.12.1",
     "@yudiel/react-qr-scanner": "^1.2.6",
     "axios": "^1.6.5",
     "babel-plugin-styled-components": "^2.1.4",
@@ -23,6 +23,6 @@
   "devDependencies": {
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
-    "prisma": "^5.10.2"
+    "prisma": "^5.12.1"
   }
 }
