@@ -52,8 +52,6 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect, checkO
             if (updatedValidInputs.every(Boolean)) {
                 AllPasswordCorrect(true);
             }
-        } else {
-            setError("Incorrect password. Please try again.");
         }
     };
 

@@ -84,7 +84,6 @@ export default function Verification() {
             )}
 
             <StyledSecretNumberBox >
-                <div>OldSecretNumber를 차례대로 입력하셔야 새로운 비밀번호를 만들 수 있습니다.</div>
                 <OldSecretNumber
                     address={walletAccount}
                     checkOldSecretNumberExists={checkOldSecretNumberExists} // 이 함수를 OldSecretNumber 컴포넌트에 전달합니다.
@@ -102,7 +101,7 @@ export default function Verification() {
 
             {oldSecretNumberExists && handleAllPassword && (
                 <StyledSecretNumberBox>
-                    <div>저장된 암호문이 없습니다. 새로운 암호문을 입력하세요</div>
+                    <div>새로운 암호문을 입력하세요</div>
                     <NewSecretNumber
                         address={walletAccount}
                     />
