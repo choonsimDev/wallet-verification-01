@@ -51,10 +51,12 @@ const SuccessMessage = styled.div`
 
 export default function OldSecretNumber({ address }) {
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [hashing, setHashing] = useState("");
     const [walletId, setWalletId] = useState(null);
     const [error, setError] = useState('');
     const [response, setResponse] = useState(null);
+    const [showForm, setShowForm] = useState(true);
 
     const onPasswordChange = (e) => {
         const newPassword = e.target.value;
@@ -66,6 +68,9 @@ export default function OldSecretNumber({ address }) {
         setHashing(hash);
         console.log("hash", hash);
         console.log("hashing", hashing);
+    }
+    const onConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
     }
 
     const getWalletId = async () => {
@@ -123,6 +128,7 @@ export default function OldSecretNumber({ address }) {
             console.log('data', data);
             if (data) {
                 setResponse(data);
+                setShowForm(false);
             } else {
                 setError('Secret not saved');
             }
@@ -132,28 +138,46 @@ export default function OldSecretNumber({ address }) {
     }
     const onSubmit = (e) => {
         e.preventDefault();
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
         saveSecret();
+        setError("");
         setPassword("");
+        setConfirmPassword("");
+        setInterval(() => {
+            location.reload();
+        }, 2000);
     }
-    // Todo : 새로운 비밀번호가 성공적으로 저장되면, 새비밀번호 입력창 숨겨야 함.
+
     return (
         <StyledInputBox>
-            <StyledForm onSubmit={onSubmit}>
-                <input
-                    type="text"
-                    value={password}
-                    onChange={onPasswordChange}
-                    placeholder="Enter New password"
-                />
-                <input type="submit" value="Create New password" />
-                <StyledHahingBox>
-                    <div>walletAddress :{address}</div>
-                    <div>walletAccountID : {walletId}</div>
-                    <div>Hashing : {hashing}</div>
-                </StyledHahingBox>
-                {response && <SuccessMessage>비밀번호가 성공적으로 저장되었습니다.</SuccessMessage>}
-                {error && <span>{error}</span>}
-            </StyledForm>
+            {response && <SuccessMessage>비밀번호가 성공적으로 저장되었습니다.</SuccessMessage>}
+            {error && <span>{error}</span>}
+            {showForm && (
+                <StyledForm onSubmit={onSubmit}>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={onPasswordChange}
+                        placeholder="Enter New password"
+                    />
+                    <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={onConfirmPasswordChange}
+                        placeholder="Confirm New Password"
+                    />
+                    <input type="submit" value="Create New password" />
+                    <StyledHahingBox>
+                        <div>walletAddress :{address}</div>
+                        <div>walletAccountID : {walletId}</div>
+                        <div>Hashing : {hashing}</div>
+                    </StyledHahingBox>
+
+                </StyledForm>
+            )}
         </StyledInputBox >
     )
 }

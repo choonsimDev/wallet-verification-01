@@ -12,6 +12,11 @@ import { MdOutlineQrCodeScanner } from "react-icons/md";
 const StyledSecretNumberBox = styled.div`
     margin-top: 2rem;
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 `;
 const StyledButton = styled.div`
     width: 300px;
@@ -101,7 +106,8 @@ export default function Verification() {
 
             {oldSecretNumberExists && handleAllPassword && (
                 <StyledSecretNumberBox>
-                    <div>새로운 암호문을 입력하세요</div>
+                    <div>모든 암호문을 바르게 입력하셨습니다.</div>
+                    <div>이제 새로운 암호문을 추가입력하세요.</div>
                     <NewSecretNumber
                         address={walletAccount}
                     />
