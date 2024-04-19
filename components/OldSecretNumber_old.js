@@ -49,7 +49,6 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect, checkO
             const updatedValidInputs = [...validInputs];
             updatedValidInputs[idx] = true;
             setValidInputs(updatedValidInputs);
-
             if (updatedValidInputs.every(Boolean)) {
                 AllPasswordCorrect(true);
             }
@@ -142,14 +141,15 @@ export default function OldSecretNumber({ address, getAllPasswordCorrect, checkO
             }
             const data = await response.json();
             setPasswords(data);
+            if (data.length > 0) {
+                checkOldSecretNumberExists(true);
+            }
+
             console.log("data", data);
         } catch (error) {
             setError('Error fetching passwords: ' + error.message);
         }
     };
-
-
-
 
     return (
         <StyledInputBox>

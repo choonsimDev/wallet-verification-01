@@ -56,7 +56,11 @@ export default function Verification() {
     }
     useEffect(() => {
         // This effect could be used for additional logic when handleAllPassword changes.
+        console.log("handleAllPassword changed:", handleAllPassword);
     }, [handleAllPassword]);
+    useEffect(() => {
+        console.log("oldSecretNumberExists changed:", oldSecretNumberExists);
+    }, [oldSecretNumberExists]);
 
     return (
         <Center>
@@ -88,7 +92,15 @@ export default function Verification() {
                 />
             </StyledSecretNumberBox>
 
-            {!oldSecretNumberExists && handleAllPassword && (
+            {walletAccount && !oldSecretNumberExists && (
+                <StyledSecretNumberBox>
+                    <NewSecretNumber
+                        address={walletAccount}
+                    />
+                </StyledSecretNumberBox>
+            )}
+
+            {oldSecretNumberExists && handleAllPassword && (
                 <StyledSecretNumberBox>
                     <div>저장된 암호문이 없습니다. 새로운 암호문을 입력하세요</div>
                     <NewSecretNumber
@@ -96,15 +108,7 @@ export default function Verification() {
                     />
                 </StyledSecretNumberBox>
             )}
-            {/* 처음 등록하는 주소면 새로운 비번 등록창 보이도록 */}
-            {/* 기존비번을 다 맞게 입력했으면 새로운 비번 등록창 보이도록 */}
-            {/* {handleAllPassword && (
-                <StyledSecretNumberBox>
-                    <NewSecretNumber
-                        address={walletAccount}
-                    />
-                </StyledSecretNumberBox>
-            )} */}
+
         </Center >
     )
 }
