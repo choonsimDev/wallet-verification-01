@@ -30,6 +30,7 @@ model WalletAccount {
   updatedAt DateTime   @updatedAt
   deletedAt DateTime?
   passwords Password[]
+  favorites Favorite[]
   // posts     Post[]
 }
 
@@ -44,4 +45,17 @@ model Password {
 
   @@index([walletAccountId])
   @@map("passwords")
+}
+
+model Favorite {
+  id              Int           @id @default(autoincrement())
+  favorite        String?
+  walletAccountId Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  deletedAt       DateTime?
+  walletAccount   WalletAccount @relation(fields: [walletAccountId], references: [id])
+
+  @@index([walletAccountId])
+  @@map("favorites")
 }
